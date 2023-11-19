@@ -19,12 +19,75 @@
         <img th:src="'/img/' + ${pelicula.imagen}" style="height: 350px; width: 300px">
     </div>
 <br>
+
+
+
+<!----------------------FORMULARIO-------------------------------->
+<div class="container">
+<form class="form-horizontal"  action="#" th:action="@{'/pelicula/' + ${pelicula.id} + '/submit'}" th:object="${posteo}" method="post">
+<fieldset>
+
+    <!-- Form Name -->
+    <legend>Comentario de la película</legend>
+
+
+    <!-- Text input-->
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="Título">Título</label>
+        <div class="col-md-4">
+            <input id="Título" name="Título" type="text" placeholder="" class="form-control input-md" required="" th:field="*{titulo}">
+
+        </div>
+    </div>
+
+    <!-- Textarea -->
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="">Comentario</label>
+        <div class="col-md-4">
+            <textarea class="form-control" id="" name="" th:field="*{contenido}"></textarea>
+        </div>
+    </div>
+
+    <!-- Button -->
+    <div class="form-group">
+        <div class="col-md-4">
+            <button id="singlebutton" name="singlebutton" class="btn btn-success">Enviar comentario</button>
+        </div>
+    </div>
+
+</fieldset>
+</form>
+</div>
+
+
+<br>
+
+<!--COMENTARIOS-->
+
+
+<div class="container">
+    <div class="row mx-auto my-4" th:each="comentarios : ${comentarios}">
+        <div class="col-md-8 border p-3">
+            <h2 th:text="${comentarios.titulo}"></h2>
+            <p th:text="${comentarios.fecha}"></p>
+            <p th:text="${comentarios.contenido}" ></p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 <a href="/">Volver al inicio</a>
+
+
+
+
 
 <!--
 <h2>Comentarios</h2>
-
-
 
 <form action="#" th:action="@{/index}" th:object="${formulario}" method="POST">
 

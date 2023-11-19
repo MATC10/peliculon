@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -26,8 +27,8 @@ public class Pelicula {
 
     private String imagen;
 
-    /*
-    @OneToMany
-    private ArrayList<Comentario> comentarios;
-     */
+//aquí funciona si pongo List en lugar de ArrayList
+    @OneToMany(mappedBy = "pelicula", cascade = CascadeType.ALL) //si borras la pelicula se borran sus comentarios
+    private List<Comentario> comentarios;
+
 }
