@@ -17,6 +17,8 @@
         <p th:text="${pelicula.sinopsis}"></p>
         <p th:text="${pelicula.fecha} + ' - ' + ${pelicula.nacionalidad}"></p>
         <img th:src="'/img/' + ${pelicula.imagen}" style="height: 350px; width: 300px">
+    <br>
+        <iframe width="560" height="315" th:src="${pelicula.trailer}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
 <br>
 
@@ -66,11 +68,11 @@
 
 
 <div class="container">
-    <div class="row mx-auto my-4" th:each="comentarios : ${comentarios}">
+    <div class="row mx-auto my-4" th:each="comentario : ${comentarios}">
         <div class="col-md-8 border p-3">
-            <h2 th:text="${comentarios.titulo}"></h2>
-            <p th:text="${comentarios.fecha}"></p>
-            <p th:text="${comentarios.contenido}" ></p>
+            <h2 th:text="${comentario.titulo}"></h2>
+            <p th:text="${comentario.fecha}"></p>
+            <p th:text="${comentario.contenido}" ></p>
         </div>
     </div>
 </div>

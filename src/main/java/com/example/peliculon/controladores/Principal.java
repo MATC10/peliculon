@@ -36,6 +36,7 @@ public class Principal {
     //Lo que sale en el <a th:href="/pelicula/{id}>
     @GetMapping("/pelicula/{id}")
     public String pelicula (@PathVariable long id, Model model){
+
         Pelicula pelicula = repositorioPeliculas.findById(id);
         //El nombre de "pelicula" es el que voy a usar en la vista de detalle.html
         model.addAttribute("pelicula", pelicula);

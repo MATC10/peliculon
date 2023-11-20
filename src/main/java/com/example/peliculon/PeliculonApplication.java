@@ -1,6 +1,8 @@
 package com.example.peliculon;
 
+import com.example.peliculon.modelos.Comentario;
 import com.example.peliculon.modelos.Pelicula;
+import com.example.peliculon.repositorios.RepositorioComentarios;
 import com.example.peliculon.repositorios.RepositorioPeliculas;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import java.util.Locale;
 public class PeliculonApplication {
 	@Autowired
 	RepositorioPeliculas repositorioPeliculas;
+	@Autowired
+	RepositorioComentarios repositorioComentarios;
 
 	public static void main(String[] args) {
 
@@ -50,11 +54,24 @@ public class PeliculonApplication {
 						p.setSinopsis(faker.leagueOfLegends().summonerSpell());
 						p.setFecha(LocalDate.now());
 						p.setNacionalidad(faker.leagueOfLegends().location());
+						p.setTrailer("https://www.youtube.com/embed/f9W1l7E5bHg?si=pWfYzzLUJbvo6hJ6");
 						repositorioPeliculas.save(p);
+
+						for(int ii = 0; ii < 3; ii++){
+							Comentario c = new Comentario();
+							c.setTitulo(faker.backToTheFuture().character());
+							c.setContenido(faker.backToTheFuture().quote());
+							c.setFecha(LocalDate.now());
+							c.setPelicula(p);
+
+							repositorioComentarios.save(c);
+						}
 					}
 				}
 			};
 		}
+
+
 	}
 
 }

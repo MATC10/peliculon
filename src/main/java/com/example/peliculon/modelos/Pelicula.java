@@ -27,6 +27,8 @@ public class Pelicula {
 
     private String imagen;
 
+    private String trailer;
+
 //aquí funciona si pongo List en lugar de ArrayList
     @OneToMany(mappedBy = "pelicula", cascade = CascadeType.ALL) //si borras la pelicula se borran sus comentarios
     private List<Comentario> comentarios;
