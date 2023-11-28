@@ -7,36 +7,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
-    <div class="container">
-        <a href="/add" class="btn btn-primary">Añadir película</a>
-        <table class="table-striped">
-            <tr>
-                <th>Id</th>
-                <th>Título</th>
-                <th>Modificar</th>
-                <th>Borrar</th>
-            </tr>
- <!--El nombre de peliculas es el que voy a utilizar en l plantilla, es el que viene del controlador crud -->
-            <tr th:each="p:${peliculas}">
-                <td th:text="${p.id}"></td>
-                <td th:text="${p.titulo}"></td>
-                <td>
-                    <a th:href="'/crud/update/' + ${p.id}" class="btn btn-primary">Modificar</a>
-                </td>
-                <td>
-                    <a th:href="'/crud/delete/' + ${p.id}" class="btn btn-danger">Borrar</a>
-                </td>
+<div class="container">
+    <!--La url de href debe aparecer en el controaldor para mostar el formulario que añade registros-->
+    <a href="/crud/add" class="btn btn-primary">Añadir película</a>
+    <table class="table-striped">
+        <tr>
+            <th>Id</th>
+            <th>Título</th>
+            <th>Sinopsis</th>
+            <th>Fecha</th>
+            <th>Nacionalidad</th>
+            <th>Imagen</th>
+            <th>Modificar</th>
+            <th>Borrar</th>
+        </tr>
+        <!--El nombre de peliculas es el que voy a utilizar en l plantilla, es el que viene del controlador crud -->
+        <tr th:each="p:${peliculas}">
+            <td th:text="${p.id}"></td>
+            <td th:text="${p.titulo}"></td>
+            <!--SI SINOPSIS ES MENOR QUE 5, COGEMOS 4 CARACTERES, DE LO CONTRARIO COGEMOS 5-->
+            <td th:text="${p.sinopsis.length < 5 ? p.sinopsis.substring(0, 4) : p.sinopsis.substring(0, 5)}"></td>
+            <td th:text="${p.fecha}"></td>
+            <td th:text="${p.nacionalidad}"></td>
+            <td><img th:src="${p.imagen}" style="height: 100px"></td>
+            <td>
+                <!--La url de th:href es un GetMapping que he puesto en el controaldor-->
+                <a th:href="'/crud/update/' + ${p.id}" class="btn btn-primary">Modificar</a>
+            </td>
+            <td>
+                <!--La url de th:href es un GetMapping que he puesto en el controaldor-->
+                <a th:href="'/crud/delete/' + ${p.id}" class="btn btn-danger">Borrar</a>
+                <!--TODO HACER QUE PREGUNTE SI QUIERE BORRAR-->
+            </td>
+        </tr>
+    </table>
+</div>
 
-            </tr>
-        </table>
-    </div>
+<a href="/">Volver al inicio</a>
 
-    <a href="/">Volver al inicio</a>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
 
 </body>
 </html>

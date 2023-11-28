@@ -3,7 +3,8 @@ package com.example.peliculon.controladores;
 import com.example.peliculon.modelos.Comentario;
 import com.example.peliculon.modelos.Pelicula;
 import com.example.peliculon.repositorios.RepositorioComentarios;
-import com.example.peliculon.repositorios.RepositorioPeliculas;
+import com.example.peliculon.servicios.ServicioComentarios;
+import com.example.peliculon.servicios.ServicioPeliculas;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,15 +17,16 @@ import java.util.List;
 @Controller
 public class Principal {
     @Autowired
-    RepositorioPeliculas repositorioPeliculas;
+    ServicioPeliculas servicioPeliculas;
 
     @Autowired
-    RepositorioComentarios repositorioComentarios;
+    ServicioComentarios servicioComentarios;
+
 
     @GetMapping("/")
     public String inicio(Model model){
 
-        ArrayList<Pelicula> cartelera = repositorioPeliculas.findAll(); //es mejor así porque podemos por ejemplo sacar la recaudación medio de la lista y luego pasarla en otro model
+        ArrayList<Pelicula> cartelera = servicioPeliculas.findAll(); //es mejor así porque podemos por ejemplo sacar la recaudación medio de la lista y luego pasarla en otro model
         model.addAttribute("cartelera", cartelera);
 
         //model.addAttribute("cartelera", cartelera = repositorioPeliculas.findAll());
@@ -37,13 +39,13 @@ public class Principal {
     @GetMapping("/pelicula/{id}")
     public String pelicula (@PathVariable long id, Model model){
 
-        Pelicula pelicula = repositorioPeliculas.findById(id);
+        Pelicula pelicula = servicioPeliculas.findById(id);
         //El nombre de "pelicula" es el que voy a usar en la vista de detalle.html
         model.addAttribute("pelicula", pelicula);
 
         model.addAttribute("posteo", new Comentario());
 
-        List<Comentario> comentarios = repositorioComentarios.findByPelicula(pelicula);
+        List<Comentario> comentarios = servicioComentarios.findByPelicula(pelicula);
 
         model.addAttribute("comentarios", comentarios);
 
@@ -55,10 +57,10 @@ public class Principal {
     @PostMapping("/pelicula/{id}/submit")
     public String crearNuevoComentario(@PathVariable long id, @ModelAttribute("posteo") Comentario comentario){
 
-        Pelicula pelicula = repositorioPeliculas.findById(id);
+        Pelicula pelicula = servicioPeliculas.findById(id);
         comentario.setPelicula(pelicula);
         comentario.setFecha(LocalDate.now());
-        repositorioComentarios.save(comentario);
+        servicioComentarios.save(comentario);
         return "redirect:/pelicula/" + id;
     }
 
