@@ -32,5 +32,15 @@ public class ServicioComentarios {
         return repositorioComentarios.findByPelicula(pelicula);
     }
 
+    public void delete (Comentario comentario){
+        repositorioComentarios.delete(comentario);
+    }
 
+    public void deleteById(long id){
+        repositorioComentarios.deleteById(id);
+    }
+
+    public ArrayList<Comentario> find3() {
+        return repositorioComentarios.find3();
+    }
 }

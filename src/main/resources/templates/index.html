@@ -6,11 +6,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!--El script del boostrap puesto con el fragments-->
+    <div th:insert="components/fragments :: head"></div>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
-    <h1>El peliculón by Cesur</h1>
+<header>
+
+    <!-- Navbar content puesto con el fragments -->
+    <div th:insert="components/fragments :: nav_bar"></div>
+</header>
+
+
 <!--
     <div class="container">
         <div th:each="cartelera : ${cartelera}">
@@ -22,15 +29,24 @@
         </div>
     </div>
 -->
-    <div class="container">
-        <div class="row" th:each="cartelera : ${cartelera}">
-            <h2><a th:href="'/pelicula/' + ${cartelera.id}" th:text="${cartelera.titulo}"></a></h2>
-            <a th:href="'/pelicula/' + ${cartelera.id}"><img th:src="'/img/' + ${cartelera.imagen}" style="height: 350px; width: 300px" ></a>
+<div class="container">
+    <!--abajo ponemos una animación de https://animate.style/ y ponemos animate__animated y el nombre de la animación-->
+    <h1 class="animate__animated animate__jello">El peliculón by Cesur</h1>
+
+    <div class="row">
+        <div class="card" th:each="pelicula:${cartelera}" style="width: 18rem;">
+            <img th:src="'/img/' + ${pelicula.imagen}" class="card-img-top" th:alt="'Cartel de: ' + ${pelicula.titulo}" style="height: 150px">
+            <div class="card-body">
+                <h5 th:text="${pelicula.titulo}" class="card-title"></h5>
+                <p th:text="${pelicula.sinopsis.length < 5 ? pelicula.sinopsis.substring(0, 4) : pelicula.sinopsis.substring(0, 20)}" class="card-text"></p>
+                <a th:href="'/pelicula/' + ${pelicula.id}" class="btn btn-primary">Ir a la película</a>
+            </div>
         </div>
     </div>
+</div>
 
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<!-- footer y script del boostrap puesto con el fragments -->
+<div th:insert="components/fragments :: footer"></div>
 </body>
 </html>

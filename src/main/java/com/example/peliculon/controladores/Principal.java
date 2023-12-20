@@ -16,58 +16,51 @@ import java.util.List;
 
 @Controller
 public class Principal {
+
     @Autowired
     ServicioPeliculas servicioPeliculas;
-
     @Autowired
     ServicioComentarios servicioComentarios;
 
-
     @GetMapping("/")
     public String inicio(Model model){
-
-        ArrayList<Pelicula> cartelera = servicioPeliculas.findAll(); //es mejor así porque podemos por ejemplo sacar la recaudación medio de la lista y luego pasarla en otro model
+        //recupera todas las peliculas
+        ArrayList<Pelicula> cartelera=servicioPeliculas.findAll();
         model.addAttribute("cartelera", cartelera);
 
-        //model.addAttribute("cartelera", cartelera = repositorioPeliculas.findAll());
+        //recuperar ultimos 3 comentarios
+        model.addAttribute("ultimoscomentarios", servicioComentarios.find3());
+
         return "index";
     }
 
     //Esta es la dirección que tengo que escribir en el navegador
-    //Esta es la dirección que tengo que escribir en el enlace del index.html
+    //Esta es la dirección que tengo que escribir en el enlace de index.html
     //Lo que sale en el <a th:href="/pelicula/{id}>
     @GetMapping("/pelicula/{id}")
-    public String pelicula (@PathVariable long id, Model model){
+    public String pelicula(@PathVariable long id, Model model){
 
-        Pelicula pelicula = servicioPeliculas.findById(id);
-        //El nombre de "pelicula" es el que voy a usar en la vista de detalle.html
-        model.addAttribute("pelicula", pelicula);
+        Pelicula p=servicioPeliculas.findById(id);
+        //El nombre de "pelicula" es el que voy a usar en la vista detalle.html
+        model.addAttribute("p", p);
 
-        model.addAttribute("posteo", new Comentario());
+        model.addAttribute("comentarios", servicioComentarios.findByPelicula(p));
+        model.addAttribute("nuevoComentario", new Comentario());
 
-        List<Comentario> comentarios = servicioComentarios.findByPelicula(pelicula);
 
-        model.addAttribute("comentarios", comentarios);
-
-        //El nombre que pongo en el return es el que tendrá el archivo html
+        //El nombre que pongo en el return es el que tendrá el archivo .html
         return "detalle";
     }
 
-
-    @PostMapping("/pelicula/{id}/submit")
-    public String crearNuevoComentario(@PathVariable long id, @ModelAttribute("posteo") Comentario comentario){
-
-        Pelicula pelicula = servicioPeliculas.findById(id);
-        comentario.setPelicula(pelicula);
+    @PostMapping("/comentario/add")
+    public String guardarComentario(@ModelAttribute("nuevoComentario") Comentario comentario,
+                                    @RequestParam long idPelicula){
         comentario.setFecha(LocalDate.now());
+        //"Localizo" la película que tiene el id que me han pasado en el campo hidden del formulario
+        Pelicula pelicula=servicioPeliculas.findById(idPelicula);
+        //Al comentario le asigno la película
+        comentario.setPelicula(pelicula);
         servicioComentarios.save(comentario);
-        return "redirect:/pelicula/" + id;
+        return "redirect:/pelicula/" + comentario.getPelicula().getId();
     }
-
-    @ExceptionHandler(Exception.class)
-    public String handleException(Exception e, Model model) {
-        model.addAttribute("error", e.getMessage());
-        return "error";
-    }
-
 }

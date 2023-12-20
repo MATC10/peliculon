@@ -4,11 +4,16 @@ import com.example.peliculon.modelos.Comentario;
 import com.example.peliculon.modelos.Pelicula;
 import com.example.peliculon.repositorios.RepositorioComentarios;
 import com.example.peliculon.repositorios.RepositorioPeliculas;
+import com.example.peliculon.servicios.ServicioComentarios;
+import com.example.peliculon.servicios.ServicioPeliculas;
+import com.example.peliculon.storage.StorageProperties;
+import com.example.peliculon.storage.StorageService;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 import java.io.IOException;
@@ -16,11 +21,12 @@ import java.time.LocalDate;
 import java.util.Locale;
 
 @SpringBootApplication
+@EnableConfigurationProperties(StorageProperties.class)
 public class PeliculonApplication {
 	@Autowired
-	RepositorioPeliculas repositorioPeliculas;
+	ServicioPeliculas servicioPeliculas;
 	@Autowired
-	RepositorioComentarios repositorioComentarios;
+	ServicioComentarios servicioComentarios;
 
 	public static void main(String[] args) {
 
@@ -40,14 +46,11 @@ public class PeliculonApplication {
 //clase para el Faker (Faker es para meter datos de relleno en la bbdd)
 	public class FilmafiinityApplication{
 
-
-//se puede hacer en otra clase aparte y pondremos otra notación en lugar de @Bean ?
 		@Bean
 		CommandLineRunner ponPeliculas(){
 			return args -> {
-//buscamos dependencias de faker y las ponemos en el pom (¿reiniciar el intellij?)
 				Faker faker = new Faker(new Locale("es-ES"));
-				if(repositorioPeliculas.findAll().size()<5) {
+				if(servicioPeliculas.findAll().size()<5) {
 					for (int i = 0; i < 5; i++) {
 						Pelicula p = new Pelicula();
 						p.setTitulo(faker.leagueOfLegends().champion());
@@ -55,7 +58,7 @@ public class PeliculonApplication {
 						p.setFecha(LocalDate.now());
 						p.setNacionalidad(faker.leagueOfLegends().location());
 						p.setTrailer("https://www.youtube.com/embed/f9W1l7E5bHg?si=pWfYzzLUJbvo6hJ6");
-						repositorioPeliculas.save(p);
+						servicioPeliculas.save(p);
 
 						for(int ii = 0; ii < 3; ii++){
 							Comentario c = new Comentario();
@@ -64,10 +67,19 @@ public class PeliculonApplication {
 							c.setFecha(LocalDate.now());
 							c.setPelicula(p);
 
-							repositorioComentarios.save(c);
+							servicioComentarios.save(c);
 						}
 					}
 				}
+			};
+		}
+
+	//ESTO ES PARA QUE LOS ARCHIVOS FUNCIONEN AL INICIAR EL PROYECTO
+	//@Bean
+	CommandLineRunner init(StorageService storageService){
+			return (args) -> {
+				//storageService.deleteAll()
+				storageService.init();
 			};
 		}
 

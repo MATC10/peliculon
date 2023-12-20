@@ -2,6 +2,8 @@ package com.example.peliculon.modelos;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,7 +22,9 @@ public class Pelicula {
     private String sinopsis;
 
     //localdate para las fechas, y localtipo para fecha y hora, para una aplicación mundial usamos: zonedtime
-    @Temporal(TemporalType.DATE)
+    //@Temporal(TemporalType.DATE)  almacena año,mes,día (sin hora)
+    //
+    @DateTimeFormat(pattern = "dd/MM/yyyy") //esto formatea la fecha
     private LocalDate fecha;
 
     private String nacionalidad;

@@ -11,10 +11,12 @@
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
+<header><div th:insert="components/fragments :: nav_bar"></div></header>
+
 <div class="container">
     <!--La url de href debe aparecer en el controaldor para mostar el formulario que añade registros-->
     <a href="/crud/add" class="btn btn-primary">Añadir película</a>
-    <table class="table-striped">
+    <table class="table striped">
         <tr>
             <th>Id</th>
             <th>Título</th>
@@ -31,16 +33,16 @@
             <td th:text="${p.titulo}"></td>
             <!--SI SINOPSIS ES MENOR QUE 5, COGEMOS 4 CARACTERES, DE LO CONTRARIO COGEMOS 5-->
             <td th:text="${p.sinopsis.length < 5 ? p.sinopsis.substring(0, 4) : p.sinopsis.substring(0, 5)}"></td>
-            <td th:text="${p.fecha}"></td>
+            <td th:text="${#temporals.format(p.fecha, 'dd/MM/yyyy')}"></td>
             <td th:text="${p.nacionalidad}"></td>
-            <td><img th:src="${p.imagen}" style="height: 100px"></td>
+            <td><img th:src="'/img/' + ${p.imagen}" style="height: 100px"></td>
             <td>
                 <!--La url de th:href es un GetMapping que he puesto en el controaldor-->
                 <a th:href="'/crud/update/' + ${p.id}" class="btn btn-primary">Modificar</a>
             </td>
             <td>
                 <!--La url de th:href es un GetMapping que he puesto en el controaldor-->
-                <a th:href="'/crud/delete/' + ${p.id}" class="btn btn-danger">Borrar</a>
+                <a th:href="'/crud/delete/' + ${p.id}" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que quieres borrar?')">Borrar</a>
                 <!--TODO HACER QUE PREGUNTE SI QUIERE BORRAR-->
             </td>
         </tr>
